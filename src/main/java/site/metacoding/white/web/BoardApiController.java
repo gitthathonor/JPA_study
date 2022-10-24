@@ -1,6 +1,9 @@
 package site.metacoding.white.web;
 
+import java.security.Principal;
 import java.util.List;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
+import site.metacoding.white.domain.User;
 import site.metacoding.white.service.BoardService;
 
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ import site.metacoding.white.service.BoardService;
 public class BoardApiController {
 
     private final BoardService boardService;
+    private final HttpSession session;
 
     @GetMapping("/board/{id}")
     public Board findById(@PathVariable Long id) {
@@ -27,6 +32,8 @@ public class BoardApiController {
 
     @PostMapping("/board")
     public String save(@RequestBody Board board) {
+        User principal = (User) session.getAttribute("principal");
+        board.setUser(principal);
         boardService.save(board);
         return "ok";
     }

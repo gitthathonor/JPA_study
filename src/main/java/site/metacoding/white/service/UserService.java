@@ -17,4 +17,8 @@ public class UserService {
     public void save(User user) {
         userRepository.save(user);
     }
+
+    public User login(User user) {
+        return userRepository.login(user);
+    }
 }
