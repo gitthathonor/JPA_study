@@ -1,5 +1,7 @@
 package site.metacoding.white.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,18 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public User login(User user) {
-        return userRepository.login(user);
+        User userPS = userRepository.findByUsername(user.getUsername());
+        if (userPS.getPassword().equals(user.getPassword())) {
+            return userPS;
+        } else {
+            throw new RuntimeException("아이디 혹은 패스워드가 잘못 입력되었습니다.");
+        }
+        // 트랜젝션 종료
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }

@@ -1,6 +1,5 @@
 package site.metacoding.white.web;
 
-import java.security.Principal;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.User;
+import site.metacoding.white.dto.BoardReqDto.BoardSaveDto;
 import site.metacoding.white.service.BoardService;
 
 @RequiredArgsConstructor
@@ -25,18 +25,38 @@ public class BoardApiController {
     private final BoardService boardService;
     private final HttpSession session;
 
+    @GetMapping("/v2/board/{id}")
+    public String findByIdV2(@PathVariable Long id) {
+        System.out.println("현재 OPEN-IN-VIEW의 상태가 true인지 false인지 확인한 다음에 진행하자");
+        Board boardPS = boardService.findById(id);
+        System.out.println(boardPS.getTitle());
+        System.out.println(boardPS.getContent());
+        System.out.println(boardPS.getId());
+        System.out.println("false이면 lazy로딩을 여기서 못함");
+        return "ok";
+    }
+
     @GetMapping("/board/{id}")
     public Board findById(@PathVariable Long id) {
         return boardService.findById(id);
     }
 
-    @PostMapping("/board")
-    public String save(@RequestBody Board board) {
+    @PostMapping("/v2/board")
+    public String saveV2(@RequestBody BoardSaveDto boardSaveDto) {
         User principal = (User) session.getAttribute("principal");
-        board.setUser(principal);
-        boardService.save(board);
+        // insert into board(title, content, user_id) values(?,?,?)
+        boardSaveDto.setUser(principal);
+        boardService.save(boardSaveDto);
         return "ok";
     }
+
+    /*
+     * @PostMapping("/board")
+     * public String save(@RequestBody Board board) {
+     * boardService.save(board);
+     * return "ok";
+     * }
+     */
 
     @PutMapping("/board/{id}")
     public String update(@PathVariable Long id, @RequestBody Board board) {

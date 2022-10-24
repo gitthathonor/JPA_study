@@ -1,5 +1,7 @@
 package site.metacoding.white.domain;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -23,5 +25,17 @@ public class UserRepository {
                 .getSingleResult();
 
         return userPS;
+    }
+
+    public List<User> findAll() {
+        List<User> userList = em.createQuery("select u from User u", User.class)
+                .getResultList();
+        return userList;
+    }
+
+    public User findByUsername(String username) {
+        return em.createQuery("select u from User u where u.username = : username", User.class)
+                .setParameter("username", username)
+                .getSingleResult();
     }
 }

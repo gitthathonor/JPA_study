@@ -2,6 +2,7 @@ package site.metacoding.white.web;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ public class UserApiController {
     private final UserService userService;
     private final HttpSession session;
 
+    // JoinDto
     @PostMapping("/join")
     public String save(@RequestBody User user) {
         userService.save(user);
@@ -26,10 +28,13 @@ public class UserApiController {
     @PostMapping("/login")
     public String login(@RequestBody User user) {
         User principal = userService.login(user);
-        if (principal == null) {
-            return "You have to join first!";
-        }
         session.setAttribute("principal", principal);
         return "ok";
     }
+
+    @GetMapping("/user")
+    public String getUserLIst() {
+        return "hello";
+    }
+
 }
