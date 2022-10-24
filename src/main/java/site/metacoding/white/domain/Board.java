@@ -22,6 +22,7 @@ public class Board {
     @Column(length = 1000)
     private String content;
 
+    // FK가 만들어짐. user_id
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 }
