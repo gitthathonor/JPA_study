@@ -11,7 +11,9 @@ import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.SessionUser;
 import site.metacoding.white.dto.UserReqDto.JoinReqDto;
 import site.metacoding.white.dto.UserReqDto.LoginReqDto;
+import site.metacoding.white.dto.UserReqDto.UpdateReqDto;
 import site.metacoding.white.dto.UserRespDto.JoinRespDto;
+import site.metacoding.white.dto.UserRespDto.UpdateRespDto;
 
 @RequiredArgsConstructor
 @Service
@@ -41,4 +43,12 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    @Transactional
+    public UpdateRespDto update(Long id, UpdateReqDto updateReqDto) {
+        User userPS = userRepository.findById(id);
+        userPS.update(updateReqDto);
+        return new UpdateRespDto(userPS);
+    }
+
 }

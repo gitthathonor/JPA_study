@@ -23,4 +23,14 @@ public class UserReqDto {
         private String username;
         private String password;
     }
+
+    @Getter
+    @Setter
+    public static class UpdateReqDto {
+        private String password;
+
+        public User toEntity() {
+            return User.builder().password(password).build();
+        }
+    }
 }

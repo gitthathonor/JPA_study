@@ -17,4 +17,16 @@ public class UserRespDto {
             this.username = user.getUsername();
         }
     }
+
+    @Setter
+    @Getter
+    public static class UpdateRespDto {
+        private String username;
+        private String password;
+
+        public UpdateRespDto(User user) {
+            this.username = user.getUsername();
+            this.password = user.getPassword();
+        }
+    }
 }

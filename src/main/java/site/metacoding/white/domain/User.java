@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import site.metacoding.white.dto.UserReqDto.UpdateReqDto;
 
 @NoArgsConstructor
 @Getter
@@ -26,5 +27,11 @@ public class User {
         this.id = id;
         this.username = username;
         this.password = password;
+    }
+
+    // 변경하는 코드는 의미 있게 메서드로 구현
+    public User update(UpdateReqDto updateReqDto) {
+        this.password = updateReqDto.getPassword();
+        return this;
     }
 }
