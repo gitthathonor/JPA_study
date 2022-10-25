@@ -8,7 +8,7 @@ public class BoardReqDto {
 
     @Setter
     @Getter
-    public static class BoardSaveDto {
+    public static class BoardSaveReqDto {
         private String title;
         private String content;
         private User user; // 이 친구는 안 받음. 서비스로직
@@ -25,7 +25,6 @@ public class BoardReqDto {
         // public void newInstance() {
         // serviceDto = new ServiceDto();
         // }
-
     }
 
     // DTO는 여기다가 추가로

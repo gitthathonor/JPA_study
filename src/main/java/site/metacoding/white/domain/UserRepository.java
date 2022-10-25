@@ -14,9 +14,12 @@ public class UserRepository {
     // DI
     private final EntityManager em;
 
-    public void save(User user) {
+    public User save(User user) {
         // Persistence Context에 영속화 시키기 -> 자동 flush(트랜젝션 종료 시)
+        System.out.println("ccc : " + user.getId());
         em.persist(user); // insert됨
+        System.out.println("ccc : " + user.getId()); // 영속화 된 후 DB와 동기화 된다.
+        return user;
     }
 
     public User login(User user) {
