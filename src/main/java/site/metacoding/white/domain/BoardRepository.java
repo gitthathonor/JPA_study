@@ -39,9 +39,4 @@ public class BoardRepository {
         return boardListPS;
     }
 
-    public Board findById() {
-        Board boardPS = em.createQuery("select b from Board b where id =: id", Board.class)
-                .getSingleResult();
-        return boardPS;
-    }
 }

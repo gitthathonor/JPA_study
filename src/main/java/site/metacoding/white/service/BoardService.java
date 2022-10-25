@@ -10,6 +10,7 @@ import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.BoardRepository;
 import site.metacoding.white.domain.UserRepository;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 
 @RequiredArgsConstructor
@@ -33,14 +34,12 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true) // 세션 종료 안 됨
-    public Board findById(Long id) {
-        System.out.println("최초 select");
+    public BoardDetailRespDto findById(Long id) {
         Board boardPS = boardRepository.findById(id); // 오픈 인뷰가 false니까 조회후 세션 종료
-        System.out.println("두번째 select");
-        boardPS.getUser().getUsername(); // Lazy 로딩됨. (근데 Eager이면 이미 로딩되서 select 두번
-        // 4. user select 됨?
+        // boardPS.getUser().getUsername(); // Lazy 로딩됨. (근데 Eager이면 이미 로딩되서 select 두번
+        BoardDetailRespDto boardDetailRespDto = new BoardDetailRespDto(boardPS);
         System.out.println("서비스단에서 지연로딩 함. 왜? 여기까지는 디비커넥션이 유지되니까");
-        return boardPS;
+        return boardDetailRespDto;
     }
 
     @Transactional

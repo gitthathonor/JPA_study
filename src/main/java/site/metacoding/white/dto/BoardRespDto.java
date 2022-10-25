@@ -41,4 +41,23 @@ public class BoardRespDto {
         }
 
     }
+
+    @Setter
+    @Getter
+    public static class BoardDetailRespDto {
+        private Long id;
+        private String title;
+        private String content;
+        private String username;
+
+        @Builder
+        public BoardDetailRespDto(Board board) {
+            this.id = board.getId();
+            this.title = board.getTitle();
+            this.content = board.getContent();
+            this.username = board.getUser().getUsername();
+        }
+
+    }
+
 }
