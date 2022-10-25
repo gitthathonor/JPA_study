@@ -16,6 +16,9 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.white.domain.Board;
 import site.metacoding.white.domain.User;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
+import site.metacoding.white.dto.ResponseDto;
+import site.metacoding.white.dto.SessionUser;
 import site.metacoding.white.service.BoardService;
 
 @RequiredArgsConstructor
@@ -25,29 +28,17 @@ public class BoardApiController {
     private final BoardService boardService;
     private final HttpSession session;
 
-    @GetMapping("/v2/board/{id}")
-    public String findByIdV2(@PathVariable Long id) {
-        System.out.println("현재 OPEN-IN-VIEW의 상태가 true인지 false인지 확인한 다음에 진행하자");
-        Board boardPS = boardService.findById(id);
-        System.out.println(boardPS.getTitle());
-        System.out.println(boardPS.getContent());
-        System.out.println(boardPS.getId());
-        System.out.println("false이면 lazy로딩을 여기서 못함");
-        return "ok";
+    @PostMapping("/board")
+    public ResponseDto<?> save(@RequestBody BoardSaveReqDto boardSaveReqDto) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        boardSaveReqDto.setSessionUser(sessionUser);
+        BoardSaveRespDto boardSaveRespDto = boardService.save(boardSaveReqDto);
+        return new ResponseDto<>(1, "성공", boardSaveRespDto);
     }
 
     @GetMapping("/board/{id}")
-    public Board findById(@PathVariable Long id) {
-        return boardService.findById(id);
-    }
-
-    @PostMapping("/v2/board")
-    public String saveV2(@RequestBody BoardSaveReqDto boardSaveReqDto) {
-        User principal = (User) session.getAttribute("principal");
-        // insert into board(title, content, user_id) values(?,?,?)
-        boardSaveReqDto.setUser(principal);
-        boardService.save(boardSaveReqDto); // 서비스에는 단 하나의 객체만 전달한다.(그 책임은 컨트롤러에게 있다)
-        return "ok";
+    public ResponseDto<?> findById(@PathVariable Long id) {
+        return new ResponseDto<>(1, "글 상세보기 성공", boardSaveRespDto);
     }
 
     @PutMapping("/board/{id}")
@@ -67,4 +58,23 @@ public class BoardApiController {
         return "ok";
     }
 
+    @PostMapping("/v2/board")
+    public String saveV2(@RequestBody BoardSaveReqDto boardSaveReqDto) {
+        User principal = (User) session.getAttribute("principal");
+        // insert into board(title, content, user_id) values(?,?,?)
+        // boardSaveReqDto.setUser(principal);
+        boardService.save(boardSaveReqDto); // 서비스에는 단 하나의 객체만 전달한다.(그 책임은 컨트롤러에게 있다)
+        return "ok";
+    }
+
+    @GetMapping("/v2/board/{id}")
+    public String findByIdV2(@PathVariable Long id) {
+        System.out.println("현재 OPEN-IN-VIEW의 상태가 true인지 false인지 확인한 다음에 진행하자");
+        Board boardPS = boardService.findById(id);
+        System.out.println(boardPS.getTitle());
+        System.out.println(boardPS.getContent());
+        System.out.println(boardPS.getId());
+        System.out.println("false이면 lazy로딩을 여기서 못함");
+        return "ok";
+    }
 }

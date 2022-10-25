@@ -14,8 +14,9 @@ public class BoardRepository {
 
     private final EntityManager em;
 
-    public void save(Board board) {
+    public Board save(Board board) {
         em.persist(board); // insert됨
+        return board;
     }
 
     public Board findById(Long id) {
@@ -36,5 +37,11 @@ public class BoardRepository {
         List<Board> boardListPS = em.createQuery("select b from Board b", Board.class)
                 .getResultList();
         return boardListPS;
+    }
+
+    public Board findById() {
+        Board boardPS = em.createQuery("select b from Board b where id =: id", Board.class)
+                .getSingleResult();
+        return boardPS;
     }
 }
