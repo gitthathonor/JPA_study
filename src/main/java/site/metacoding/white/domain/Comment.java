@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@Setter
+@Setter // 최종적으로 Entity에는 없어져야 함. 잠시 사용중. 사용 완료 후 삭제해야함
 @Getter
 @Entity
 public class Comment {
