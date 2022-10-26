@@ -18,4 +18,17 @@ public class BoardReqDto {
                     .user(sessionUser.toEntity()).build();
         }
     }
+
+    @Setter
+    @Getter
+    public static class BoardUpdateReqDto {
+        private String title;
+        private String content;
+        private Long id; // 서비스로직
+
+        public Board toEntity() {
+            return Board.builder().title(title).content(content)
+                    .id(id).build();
+        }
+    }
 }

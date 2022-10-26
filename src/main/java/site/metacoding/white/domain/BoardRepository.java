@@ -1,6 +1,7 @@
 package site.metacoding.white.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -19,12 +20,29 @@ public class BoardRepository {
         return board;
     }
 
-    public Board findById(Long id) {
+    public Optional<Board> findById(Long id) {
         // JPQL 문법
-        Board boardPS = em.createQuery("select b from Board b where b.id = :id", Board.class)
-                .setParameter("id", id)
-                .getSingleResult();
-        return boardPS;
+        // Optional<Board> boardOP = Optional.of(em.createQuery("select b from Board b
+        // where b.id = :id", Board.class)
+        // .setParameter("id", id)
+        // .getSingleResult());
+
+        // 제어권을 못 가졌을 때 사용하는 방법
+        /*
+         * try {
+         * Optional<Board> boardOP =
+         * Optional.of(em.createQuery("select b from Board b where b.id = :id",
+         * Board.class)
+         * .setParameter("id", id)
+         * .getSingleResult());
+         * return boardOP;
+         * } catch (Exception e) {
+         * return Optional.empty();
+         * }
+         */
+
+        Board board = em.find(Board.class, id);
+        return Optional.ofNullable(board);
     }
 
     public void deleteById(Long id) {

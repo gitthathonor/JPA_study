@@ -1,7 +1,5 @@
 package site.metacoding.white.web;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import site.metacoding.white.domain.Board;
 import site.metacoding.white.dto.BoardReqDto.BoardSaveReqDto;
+import site.metacoding.white.dto.BoardReqDto.BoardUpdateReqDto;
 import site.metacoding.white.dto.BoardRespDto.BoardDetailRespDto;
 import site.metacoding.white.dto.BoardRespDto.BoardSaveRespDto;
 import site.metacoding.white.dto.ResponseDto;
@@ -36,6 +34,7 @@ public class BoardApiController {
         return new ResponseDto<>(1, "성공", boardSaveRespDto);
     }
 
+    // 게시글 상세보기
     @GetMapping("/board/{id}")
     public ResponseDto<?> findById(@PathVariable Long id) {
         // SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
@@ -45,20 +44,20 @@ public class BoardApiController {
     }
 
     @PutMapping("/board/{id}")
-    public String update(@PathVariable Long id, @RequestBody Board board) {
-        boardService.update(id, board);
-        return "ok";
+    public ResponseDto<?> update(@PathVariable Long id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
+        boardUpdateReqDto.setId(id);
+        return new ResponseDto<>(1, "글 수정 성공", boardService.update(boardUpdateReqDto));
     }
 
     @GetMapping("/board")
-    public List<Board> findAll() {
-        return boardService.findAll();
+    public ResponseDto<?> findAll() {
+        return new ResponseDto<>(1, "글 리스트 보기 성공", boardService.findAll());
     }
 
     @DeleteMapping("/board/{id}")
-    public String deleteById(@PathVariable Long id) {
+    public ResponseDto<?> deleteById(@PathVariable Long id) {
         boardService.deleteById(id);
-        return "ok";
+        return new ResponseDto<>(1, "글 삭제 성공", null);
     }
 
     // @PostMapping("/v2/board")
