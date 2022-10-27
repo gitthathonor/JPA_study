@@ -54,7 +54,7 @@ public class BoardRespDto {
         private String title;
         private String content;
         private BoardUserDto user;
-        private List<CommentDto> comment = new ArrayList<>();
+        private List<CommentDto> comments = new ArrayList<>();
 
         @Setter
         @Getter
@@ -105,7 +105,7 @@ public class BoardRespDto {
             this.title = board.getTitle();
             this.content = board.getContent();
             this.user = new BoardUserDto(board.getUser());
-            this.comment = board.getComments().stream().map((comment) -> new CommentDto(comment))
+            this.comments = board.getComments().stream().map((comment) -> new CommentDto(comment))
                     .collect(Collectors.toList());
         }
 

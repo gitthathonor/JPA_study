@@ -2,6 +2,7 @@ package site.metacoding.white.web;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class BoardApiController {
     }
 
     // 게시글 상세보기 (Board + User + List<Comment>)
+    @CrossOrigin
     @GetMapping("/board/{id}")
     public ResponseDto<?> findById(@PathVariable Long id) {
         // SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");

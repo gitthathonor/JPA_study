@@ -28,21 +28,20 @@ public class BoardRepository {
         // .getSingleResult());
 
         // 제어권을 못 가졌을 때 사용하는 방법
-        /*
-         * try {
-         * Optional<Board> boardOP =
-         * Optional.of(em.createQuery("select b from Board b where b.id = :id",
-         * Board.class)
-         * .setParameter("id", id)
-         * .getSingleResult());
-         * return boardOP;
-         * } catch (Exception e) {
-         * return Optional.empty();
-         * }
-         */
 
-        Board board = em.find(Board.class, id);
-        return Optional.ofNullable(board);
+        try {
+            Optional<Board> boardOP = Optional.of(em
+                    .createQuery("select b from Board b join fetch b.user u join fetch b.comments c where b.id = :id",
+                            Board.class)
+                    .setParameter("id", id)
+                    .getSingleResult());
+            return boardOP;
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+
+        // Board board = em.find(Board.class, id);
+        // return Optional.ofNullable(board);
     }
 
     public void deleteById(Long id) {
