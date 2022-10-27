@@ -14,16 +14,20 @@ import site.metacoding.white.dto.UserReqDto.LoginReqDto;
 import site.metacoding.white.dto.UserReqDto.UpdateReqDto;
 import site.metacoding.white.dto.UserRespDto.JoinRespDto;
 import site.metacoding.white.dto.UserRespDto.UpdateRespDto;
+import site.metacoding.white.util.SHA256;
 
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SHA256 sha256;
 
     // 응답의 Dto는 서비스에서 만든다.
     @Transactional // 트랜젝션을 붙이지 않으면 영속화 되어 있는 객체가 flush가 안 됨
     public JoinRespDto save(JoinReqDto joinReqDto) {
+        String encPassword = sha256.encrypt(joinReqDto.getPassword());
+        joinReqDto.setPassword(encPassword);
         User userPS = userRepository.save(joinReqDto.toEntity());
         return new JoinRespDto(userPS);
     }
@@ -31,7 +35,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public SessionUser login(LoginReqDto loginReqDto) {
         User userPS = userRepository.findByUsername(loginReqDto.getUsername());
-        if (userPS.getPassword().equals(loginReqDto.getPassword())) {
+        if (userPS.getPassword().equals(sha256.encrypt(loginReqDto.getPassword()))) {
             System.out.println("ccc : SessionUser로 변환시작");
             return new SessionUser(userPS);
         } else {
