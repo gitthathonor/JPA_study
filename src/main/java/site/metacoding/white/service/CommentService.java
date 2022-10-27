@@ -37,4 +37,15 @@ public class CommentService {
             throw new RuntimeException("게시글이 없어서 댓글을 쓸 수 없습니다.");
         }
     }
+
+    @Transactional
+    public void deleteById(Long id) {
+        Optional<Comment> commentOP = commentRepository.findById(id);
+
+        if (commentOP.isEmpty()) {
+            throw new RuntimeException("게시글이 없어서 댓글을 쓸 수 없습니다.");
+        } else {
+            commentRepository.deleteById(id);
+        }
+    }
 }

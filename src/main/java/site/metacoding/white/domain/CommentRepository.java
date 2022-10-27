@@ -1,5 +1,7 @@
 package site.metacoding.white.domain;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
@@ -22,6 +24,11 @@ public class CommentRepository {
         em.createQuery("delete from Comment c where c.id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    public Optional<Comment> findById(Long id) {
+        Comment commentPS = em.find(Comment.class, id);
+        return Optional.ofNullable(commentPS);
     }
 
 }
