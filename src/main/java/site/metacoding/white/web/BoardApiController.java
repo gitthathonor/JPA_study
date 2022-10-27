@@ -39,14 +39,20 @@ public class BoardApiController {
     @CrossOrigin
     @GetMapping("/board/{id}")
     public ResponseDto<?> findById(@PathVariable Long id) {
-        // SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
-        // 세션 처리에 대한 고민
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new RuntimeException("로그인을 진행해주세요");
+        }
         BoardDetailRespDto boardDetailRespDto = boardService.findById(id);
         return new ResponseDto<>(1, "글 상세보기 성공", boardDetailRespDto);
     }
 
     @PutMapping("/board/{id}")
     public ResponseDto<?> update(@PathVariable Long id, @RequestBody BoardUpdateReqDto boardUpdateReqDto) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new RuntimeException("로그인을 진행해주세요");
+        }
         boardUpdateReqDto.setId(id);
         return new ResponseDto<>(1, "글 수정 성공", boardService.update(boardUpdateReqDto));
     }
@@ -58,6 +64,10 @@ public class BoardApiController {
 
     @DeleteMapping("/board/{id}")
     public ResponseDto<?> deleteById(@PathVariable Long id) {
+        SessionUser sessionUser = (SessionUser) session.getAttribute("sessionUser");
+        if (sessionUser == null) {
+            throw new RuntimeException("로그인을 진행해주세요");
+        }
         boardService.deleteById(id);
         return new ResponseDto<>(1, "글 삭제 성공", null);
     }
