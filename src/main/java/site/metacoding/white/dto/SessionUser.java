@@ -1,11 +1,9 @@
 package site.metacoding.white.dto;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import site.metacoding.white.domain.User;
 
-@NoArgsConstructor
 @Setter
 @Getter
 public class SessionUser {
